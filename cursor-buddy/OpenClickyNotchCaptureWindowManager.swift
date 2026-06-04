@@ -1193,6 +1193,13 @@ final class OpenClickyNotchCaptureWindowManager {
             let height = activeMode == .voice ? Self.voicePanelHeight : Self.collapsedPanelHeight
             resizeAndReposition(width: width, height: height)
         }
+        // Honor the user preference. When hover-to-expand is disabled, the proximity probe must do
+        // NOTHING on hover — not expand, and crucially not collapse — otherwise a click-to-open is
+        // collapsed by the very next probe tick. (Hover-open is intrusive on the MacBook Air notch.)
+        let hoverExpandEnabled = UserDefaults.standard.object(
+            forKey: AppBundleConfiguration.userNotchHoverExpandDefaultsKey
+        ) as? Bool ?? true
+        guard hoverExpandEnabled else { return }
         if showDynamicNotchKitStatusForCurrentModeIfAvailable(on: hoveredScreen, opensExpanded: true) {
             panel?.orderOut(nil)
         } else if !Self.hasPhysicalNotch(on: hoveredScreen) {
@@ -2047,6 +2054,12 @@ private final class OpenClickyNotchCaptureRootView: NSView {
 
     override func mouseEntered(with event: NSEvent) {
         guard mode == .collapsed || mode == .voice else { return }
+        // Respect the user's preference. Hover-to-expand near the notch can be intrusive on
+        // small displays (e.g. the MacBook Air notch), so it can be disabled in Settings.
+        let hoverExpandEnabled = UserDefaults.standard.object(
+            forKey: AppBundleConfiguration.userNotchHoverExpandDefaultsKey
+        ) as? Bool ?? true
+        guard hoverExpandEnabled else { return }
         guard let screen = window?.screen, OpenClickyNotchCaptureWindowManager.hasPhysicalNotch(on: screen) else { return }
         let localPoint = convert(event.locationInWindow, from: nil)
         guard shellView.frame.contains(localPoint) else { return }

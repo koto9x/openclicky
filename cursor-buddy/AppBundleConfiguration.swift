@@ -35,6 +35,9 @@ nonisolated enum AppBundleConfiguration {
     static let userAppSubtextFontSizeDefaultsKey = "openClickyAppSubtextFontSize"
     static let userAppLineSpacingDefaultsKey = "openClickyAppLineSpacing"
     static let userAppBoldTextDefaultsKey = "openClickyAppBoldTextEnabled"
+    /// Whether moving the cursor near the notch auto-expands the OpenClicky panel.
+    /// Default-on preserves existing behavior; users on small displays can turn it off.
+    static let userNotchHoverExpandDefaultsKey = "openClickyNotchHoverExpand"
     static let userCodexAgentAPIKeyDefaultsKey = "openClickyCodexAgentAPIKey"
     static let userAssemblyAIAPIKeyDefaultsKey = "openClickyAssemblyAIAPIKey"
     static let userDeepgramAPIKeyDefaultsKey = "openClickyDeepgramAPIKey"

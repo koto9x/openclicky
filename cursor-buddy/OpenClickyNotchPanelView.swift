@@ -70,6 +70,7 @@ struct OpenClickyNotchPanelView: View {
     @AppStorage(AppBundleConfiguration.userAppSubtextFontSizeDefaultsKey) private var appSubtextFontSize = 11.0
     @AppStorage(AppBundleConfiguration.userAppLineSpacingDefaultsKey) private var appLineSpacing = 2.0
     @AppStorage(AppBundleConfiguration.userThemeDefaultsKey) private var clickyTheme = ClickyTheme.system.rawValue
+    @AppStorage(AppBundleConfiguration.userNotchHoverExpandDefaultsKey) private var notchHoverExpand = true
     @State private var isShowingHatchSheet = false
     @State private var hatchPetName = ""
     @State private var hatchPetDescription = ""
@@ -1501,6 +1502,7 @@ struct OpenClickyNotchPanelView: View {
         VStack(spacing: 10) {
             cursorBuddySection
             cursorColorSection
+            notchBehaviorSection
 
             primaryActionButton(title: "Full settings", systemImageName: "gearshape.fill") {
                 companionManager.showSettingsWindow()
@@ -1806,6 +1808,28 @@ struct OpenClickyNotchPanelView: View {
                 .controlSize(.small)
                 .tint((ClickyAccentTheme(rawValue: selectedAccentThemeID) ?? .blue).cursorColor)
             }
+        }
+    }
+
+    private var notchBehaviorSection: some View {
+        VStack(alignment: .leading, spacing: 7) {
+            Text("Notch")
+                .font(panelUIFont(size: 12, weight: .heavy))
+                .foregroundColor(DS.Colors.textSecondary)
+            Toggle(isOn: $notchHoverExpand) {
+                VStack(alignment: .leading, spacing: 1) {
+                    Text("Expand on hover near the notch")
+                        .font(panelUIFont(size: 11, weight: .heavy))
+                        .foregroundColor(DS.Colors.textSecondary)
+                    Text("Turn off if the panel opens by accident on small displays.")
+                        .font(panelUIFont(size: 9, weight: .semibold))
+                        .foregroundColor(DS.Colors.textTertiary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .toggleStyle(.switch)
+            .controlSize(.small)
+            .tint((ClickyAccentTheme(rawValue: selectedAccentThemeID) ?? .blue).cursorColor)
         }
     }
 
